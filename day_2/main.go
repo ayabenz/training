@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/salamander-labs/training/day_2/handler"
 	"net/http"
-	"training/day_2/handler"
 )
 
 func main() {

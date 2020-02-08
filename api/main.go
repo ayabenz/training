@@ -19,6 +19,7 @@ func main() {
 
 	router.HandleFunc("/login", login).Methods("POST")
 	router.HandleFunc("/users/all", getData).Methods("GET")
+	router.HandleFunc("/users/get", getData).Methods("GET")
 
 	http.Handle("/", router)
 	log.Fatal(http.ListenAndServe(baseUrl, router))
@@ -39,7 +40,10 @@ func getData(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 	var response http.Response
 	var arrUser []User
-	rows, err := db.Query("SELECT TOP 5 Name, Email, NoTelepon FROM tbl_mst_user WHERE Name IS NOT NULL AND Email IS NOT NULL")
+
+	search := request.URL.Query().Get("name")
+
+	rows, err := db.Query("SELECT TOP 5 Name, Email, NoTelepon FROM tbl_mst_user WHERE Name IS NOT NULL AND Email IS NOT NULL AND Name LIKE '%" + search + "%'")
 	if rows != nil {
 		defer rows.Close()
 	}
